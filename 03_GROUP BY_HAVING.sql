@@ -116,7 +116,12 @@ GROUP BY DEPT_CODE
 HAVING AVG(SALARY) >= 3000000 --> DEPT_CODE 그룹 중 급여 평균이 3백만원 이상인 그룹만 조회
 ORDER BY DEPT_CODE; 
 
-
+-- EMPLOYEE 테이블에서 직급별 인원수가 5명 이하인 직급 코드, 인원수 조회(직급코드 오름차순)
+SELECT JOB_CODE, COUNT(*)
+FROM EMPLOYEE
+GROUP BY JOB_CODE 
+HAVING COUNT(*) <= 5 -- HAVING절에는 그룹 함수가 반드시 작성된다.
+ORDER BY 1;
 
 
 
