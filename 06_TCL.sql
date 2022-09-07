@@ -37,10 +37,62 @@
     ROLLBACK TO 포인트명1; -- 포인트1 지점 까지 데이터 변경사항 삭제
 
 */
+-- 테이블 복사 구문
+-- CREATE TABLE DEPARTMENT2 
+-- AS SELECT * FROM DEPARTMENT;
 
 SELECT * FROM DEPARTMENT2;
 
+-- 새로운 데이터 INSERT 
+INSERT INTO DEPARTMENT2 VALUES('T1', '개발1팀', 'L2');
+INSERT INTO DEPARTMENT2 VALUES('T2', '개발2팀', 'L2');
+INSERT INTO DEPARTMENT2 VALUES('T3', '개발3팀', 'L2');
 
+-- INSERT 확인
+SELECT * FROM DEPARTMENT2;
+--> DB에 반영된 것 처럼 보이지만
+-- SQL 수행 시 트랜잭션 내용도 포함해서 수행된다.
+-- (실제로 아직 DB 반영 X)
+
+-- ROLLBACK 후 확인
+ROLLBACK;
+SELECT * FROM DEPARTMENT2;
+
+-- COMMIT 후 ROLLBACK이 되는지 확인
+INSERT INTO DEPARTMENT2 VALUES('T1', '개발1팀', 'L2');
+INSERT INTO DEPARTMENT2 VALUES('T2', '개발2팀', 'L2');
+INSERT INTO DEPARTMENT2 VALUES('T3', '개발3팀', 'L2');
+
+COMMIT;
+SELECT * FROM DEPARTMENT2;
+
+ROLLBACK;
+SELECT * FROM DEPARTMENT2; --> 롤백 안됨! (DB로 간 건 되돌릴 수 없음)
+
+------------------------------------------------------------------------------
+
+-- SAVEPOINT 확인
+INSERT INTO DEPARTMENT2 VALUES('T4', '개발4팀', 'L2');
+SAVEPOINT SP1; -- SAVEPOINT 지정
+
+INSERT INTO DEPARTMENT2 VALUES('T5', '개발5팀', 'L2');
+SAVEPOINT SP2; -- SAVEPOINT 지정
+
+INSERT INTO DEPARTMENT2 VALUES('T6', '개발6팀', 'L2');
+
+SELECT * FROM DEPARTMENT2;
+
+-- SP2 지점까지 롤백
+ROLLBACK TO SP2;
+SELECT * FROM DEPARTMENT2; -- 개발 6팀만 롤백
+
+-- SP1 지점까지 롤백
+ROLLBACK TO SP1;
+SELECT * FROM DEPARTMENT2; -- 개발 5팀만 롤백
+
+-- 롤백 수행
+ROLLBACK;
+SELECT * FROM DEPARTMENT2;
 
 
 
