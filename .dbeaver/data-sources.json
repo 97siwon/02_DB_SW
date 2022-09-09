@@ -31,8 +31,7 @@
 				"auth-model": "oracle_native",
 				"auth-properties": {
 					"oracle.logon-as": "sysdba"
-				},
-				"handlers": {}
+				}
 			}
 		},
 		"oracle_thin-18306fe04e0-10ed837a4537046": {
@@ -62,8 +61,7 @@
 					"@dbeaver-connection-type@": "BASIC",
 					"@dbeaver-sid-service@": "SERVICE"
 				},
-				"auth-model": "oracle_native",
-				"handlers": {}
+				"auth-model": "oracle_native"
 			}
 		},
 		"oracle_thin-18307053bb7-53107ae8d51faf9b": {
@@ -93,8 +91,10 @@
 					"@dbeaver-connection-type@": "BASIC",
 					"@dbeaver-sid-service@": "SERVICE"
 				},
-				"auth-model": "oracle_native",
-				"handlers": {}
+				"auth-model": "oracle_native"
+			},
+			"custom-properties": {
+				"resultset.maxrows": "600"
 			}
 		}
 	},
