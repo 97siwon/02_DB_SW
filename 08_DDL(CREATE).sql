@@ -469,6 +469,9 @@ VALUES(5, 'user05', 'pass05', '윤봉길', '남', '010-6666-1234', 'yoon123@kh.o
 --> 50이라는 값은 USER_GRADE 테이블 GRADE_CODE 컬럼에서 제공하는 값이 아니므로
  -- 외래키 제약 조건에 위배되어 오류 발생.
 
+-- ORA-02291: 무결성 제약조건(KH_LSW.GRADE_CODE_FK)이 위배되었습니다- 
+-- 부모 키가 없습니다
+
 
 ---------------------------------------
 
@@ -482,10 +485,17 @@ SELECT * FROM USER_USED_FK;
 -- 1) ON DELETE RESTRICTED(삭제 제한)로 기본 지정되어 있음
 -- FOREIGN KEY로 지정된 컬럼에서 사용되고 있는 값일 경우
 -- 제공하는 컬럼의 값은 삭제하지 못함
+DELETE FROM USER_GRADE 
+WHERE GRADE_CODE = 30;
+-- ORA-02292: 무결성 제약조건(KH_LSW.GRADE_CODE_FK)이 위배되었습니다- 
+-- 자식 레코드가 발견되었습니다
+
 
 -- GRADE_CODE 중 20은 외래키로 참조되고 있지 않으므로 삭제가 가능함.
+DELETE FROM USER_GRADE 
+WHERE GRADE_CODE = 20;
 
-
+ROLLBACK;
 
 -- 2) ON DELETE SET NULL : 부모키 삭제시 자식키를 NULL로 변경하는 옵션
 CREATE TABLE USER_GRADE2(
@@ -497,7 +507,7 @@ INSERT INTO USER_GRADE2 VALUES (10, '일반회원');
 INSERT INTO USER_GRADE2 VALUES (20, '우수회원');
 INSERT INTO USER_GRADE2 VALUES (30, '특별회원');
 
--- ON DELETE SET NUL 삭제 옵션이 적용된 테이블 생성
+-- ON DELETE SET NULL 삭제 옵션이 적용된 테이블 생성
 CREATE TABLE USER_USED_FK2(
   USER_NO NUMBER PRIMARY KEY,
   USER_ID VARCHAR2(20) UNIQUE,
