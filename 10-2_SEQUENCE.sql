@@ -63,12 +63,58 @@ SELECT SEQ_TEST.NEXTVAL FROM DUAL; -- 5
 SELECT SEQ_TEST.CURRVAL FROM DUAL; -- 5
 
 
+--------------------------------------------------------------------------------------
+
+-- 실제 사용 예시
+CREATE TABLE EMP_TEMP
+AS SELECT EMP_ID, EMP_NAME FROM EMPLOYEE;
+
+SELECT * FROM EMP_TEMP;
+
+-- 223번부터 10씩 증가하는 시퀀스 생성
+CREATE SEQUENCE SEQ_TEMP
+START WITH 223  -- 223 시작
+INCREMENT BY 10 -- 10씩 증가
+NOCYCLE         -- 반복X (기본값)
+NOCACHE;        -- 캐시X (CACHE 20이 기본값)
 
 
+-- EMP_TEMP 테이블에 사원 정보 삽입
+INSERT INTO EMP_TEMP VALUES(SEQ_TEMP.NEXTVAL, '홍길동'); -- 223
+INSERT INTO EMP_TEMP VALUES(SEQ_TEMP.NEXTVAL, '고길동'); -- 233
+INSERT INTO EMP_TEMP VALUES(SEQ_TEMP.NEXTVAL, '고갈동'); -- 243
+
+SELECT * FROM EMP_TEMP
+ORDER BY EMP_ID DESC;
+
+-----------------------------------------------------------------------
+
+-- SEQUENCE 수정
+/*
+  CREATE SEQUENCE 시퀀스이름
+  [STRAT WITH 숫자] -- 처음 발생시킬 시작값 지정, 생략하면 자동 1이 기본
+  [INCREMENT BY 숫자] -- 다음 값에 대한 증가치, 생략하면 자동 1이 기본
+  [MAXVALUE 숫자 | NOMAXVALUE] -- 발생시킬 최대값 지정 (10의 27승 -1)
+  [MINVALUE 숫자 | NOMINVALUE] -- 최소값 지정 (-10의 26승)
+  [CYCLE | NOCYCLE] -- 값 순환 여부 지정
+  [CACHE 바이트크기 | NOCACHE] -- 캐쉬메모리 기본값은 20바이트, 최소값은 2바이트
+*/
+
+-- SEQ_TEMP를 1씩 증가하는 형태로 변경
+ALTER SEQUENCE SEQ_TEMP
+INCREMENT BY 1;
+
+INSERT INTO EMP_TEMP VALUES(SEQ_TEMP.NEXTVAL, '이길동'); -- 244
+INSERT INTO EMP_TEMP VALUES(SEQ_TEMP.NEXTVAL, '이나동'); -- 245
+INSERT INTO EMP_TEMP VALUES(SEQ_TEMP.NEXTVAL, '고성동'); -- 246
 
 
+SELECT * FROM EMP_TEMP ORDER BY 1 DESC;
 
-
+-- 테이블(EMP_TEMP), 뷰(V_DCODY2), 시퀀스(SEQ_TEMP) 삭제
+DROP TABLE EMP_TEMP;
+DROP VIEW V_DCODY2;
+DROP SEQUENCE SEQ_TEMP;
 
 
 
